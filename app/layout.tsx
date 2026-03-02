@@ -4,8 +4,10 @@ import StyledComponentsRegistry from "../lib/registry";
 import { Inter } from "next/font/google";
 import Sidebar from "./sidebar/page";
 import * as S from "./layout.styles";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Bars3Icon } from "@heroicons/react/24/outline";
+import { usePathname, useRouter } from "next/navigation";
+import { auth } from "@/lib/firebase";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,15 +17,32 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const isLoginPage = pathname === "/";
+  const isAuthPage = pathname === "/" || pathname === "/register";
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (!user && pathname !== "/") {
+        router.push("/");
+      }
+    });
+    return () => unsubscribe();
+  }, [pathname, router]);
+
   return (
     <html lang="en" className={inter.className}>
       <body>
         <StyledComponentsRegistry>
           <S.LayoutWrapper>
-            <Sidebar
-              $isMobileOpen={isMobileMenuOpen}
-              onClose={() => setIsMobileMenuOpen(false)}
-            />
+            {!isLoginPage && !isAuthPage && (
+              <Sidebar
+                $isMobileOpen={isMobileMenuOpen}
+                onClose={() => setIsMobileMenuOpen(false)}
+              />
+            )}
             <S.MainContent>
               <S.MobileHeader>
                 <button onClick={() => setIsMobileMenuOpen(true)}>

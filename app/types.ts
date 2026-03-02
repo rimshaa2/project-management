@@ -1,8 +1,21 @@
 export enum Status {
-  Pending = "pending",
-  Process = "process",
-  Completed = "completed",
+  PENDING = "pending",
+  PROCESS = "process",
+  COMPLETED = "completed",
 }
+
+export enum UserRole {
+  ADMIN = "admin",
+  USER = "user",
+}
+
+export type UserProfile = {
+  uid: string;
+  email: string;
+  password: string;
+  role: UserRole;
+  name: string;
+};
 
 export type Task = {
   id?: string;
@@ -11,6 +24,7 @@ export type Task = {
   status: Status;
   projectId: string;
   assignedTo: string;
+  startDate: string;
   endDate: string;
   updatedAt?: any;
 };

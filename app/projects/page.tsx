@@ -2,8 +2,6 @@
 import { useProjects } from "../hooks/useProjects";
 import * as S from "./ProjectModal.styles";
 import * as D from "../dashboard/Dashboard.styles";
-import * as P from "../sidebar/SideBar.styles";
-import Sidebar from "../sidebar/page";
 import {
   CalendarIcon,
   CheckCircleIcon,
@@ -12,19 +10,20 @@ import {
   UserGroupIcon,
   XCircleIcon,
   PlusIcon,
-  Bars3Icon,
 } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { deleteDoc, doc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import ProjectModal from "./ProjectModal";
 import Link from "next/link";
+import { useRole } from "../hooks/useRole";
 
 export default function ProjectPage() {
   const { projects, tasks, loading } = useProjects();
   const [editingProject, setEditingProject] = useState<any>(null);
   const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const { isAdmin } = useRole();
 
   const handlDelete = async (id: string) => {
     if (window.confirm("Are you sure yu want to delete this project?")) {
@@ -38,10 +37,12 @@ export default function ProjectPage() {
         <D.DashboardContainer>
           <D.HeaderRow>
             <D.Title style={{ margin: 0 }}>Projects</D.Title>
-            <D.PrimaryButton onClick={() => setIsCreateModalOpen(true)}>
-              <PlusIcon className="size-5" />
-              New Project
-            </D.PrimaryButton>
+            {isAdmin && (
+              <D.PrimaryButton onClick={() => setIsCreateModalOpen(true)}>
+                <PlusIcon className="size-5" />
+                New Project
+              </D.PrimaryButton>
+            )}
           </D.HeaderRow>
           <hr style={{ borderColor: "#333", marginBottom: "40px" }} />
           <S.ProjectGrid>
@@ -66,7 +67,7 @@ export default function ProjectPage() {
                             e.preventDefault();
                           }}
                         />
-                        {activeMenuId === project.id && (
+                        {activeMenuId === project.id && isAdmin && (
                           <S.ActionMenu>
                             <button
                               onClick={(e) => {

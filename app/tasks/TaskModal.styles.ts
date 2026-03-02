@@ -164,6 +164,19 @@ export const HelperText = styled.p`
   line-height: 1.4;
 `;
 
+export const RequiredLabel = styled.label`
+  color: #ccc;
+  margin-bottom: 8px;
+  font-size: 0.85rem;
+  display: block;
+
+  &::after {
+    content: " *";
+    color: #ef4444; /* A bright red color */
+    font-weight: bold;
+  }
+`;
+
 export const LogoIcon = styled.div`
   display: flex;
   align-items: center;

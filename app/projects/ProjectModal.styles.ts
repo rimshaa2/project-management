@@ -137,13 +137,6 @@ export const HelperText = styled.p`
   line-height: 1.4;
 `;
 
-export const LogoIcon = styled.div`
-  width: 24px;
-  height: 24px;
-  border: 2px solid red;
-  border-radius: 4px; /* Mock logo */
-`;
-
 export const ProjectGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -153,11 +146,11 @@ export const ProjectGrid = styled.div`
 export const ProjectCard = styled.div`
   background: #1e1e1e;
   border: 1px solid #333;
-  border-radius: 12px;
+  border-radius: 8px;
   padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 14px;
 `;
 
 export const CardHeader = styled.div`

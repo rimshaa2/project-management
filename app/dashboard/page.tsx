@@ -14,47 +14,47 @@ export default function DashboardPage() {
   const { projects } = useProjects();
 
   const CHART_COLORS = {
-    [Status.Pending]: "#6366f1",
-    [Status.Process]: "#f59e0b",
-    [Status.Completed]: "#10b981",
+    [Status.PENDING]: "#6366f1",
+    [Status.PROCESS]: "#f59e0b",
+    [Status.COMPLETED]: "#10b981",
   };
 
   const completedCount = activities.filter(
-    (a) => a.status === Status.Completed,
+    (a) => a.status === Status.COMPLETED,
   ).length;
   const pendingCount = activities.filter(
-    (a) => a.status !== Status.Completed,
+    (a) => a.status !== Status.COMPLETED,
   ).length;
 
   const taskData = [
     {
       name: "Pending",
       value: pendingCount,
-      fill: CHART_COLORS[Status.Pending],
+      fill: CHART_COLORS[Status.PENDING],
     },
     {
       name: "Completed",
       value: completedCount,
-      fill: CHART_COLORS[Status.Completed],
+      fill: CHART_COLORS[Status.COMPLETED],
     },
   ];
   const completedProjCount = projects.filter(
-    (p) => p.status === Status.Completed,
+    (p) => p.status === Status.COMPLETED,
   ).length;
   const pendingProjCount = projects.filter(
-    (p) => p.status !== Status.Completed,
+    (p) => p.status !== Status.COMPLETED,
   ).length;
 
   const projectData = [
     {
       name: "Pending",
       value: pendingProjCount,
-      fill: CHART_COLORS[Status.Pending],
+      fill: CHART_COLORS[Status.PENDING],
     },
     {
-      name: "Completed",
+      name: "completed",
       value: completedProjCount,
-      fill: CHART_COLORS[Status.Completed],
+      fill: CHART_COLORS[Status.COMPLETED],
     },
   ];
 

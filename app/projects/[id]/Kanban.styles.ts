@@ -1,34 +1,26 @@
 import styled from "styled-components";
 
 export const KanbanBoard = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 20px;
-  overflow-x: auto;
-  padding-top: 20px;
-  overflow-x: auto;
+  width: 100%;
+  padding: 20px;
   height: calc(100vh -180px);
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-    padding: 12px;
-  }
 `;
 
 export const Column = styled.div`
   background: #1a1a1a;
-  border-radius: 12px;
+  border-radius: 8px;
   min-width: 300px;
   flex: 1;
   display: flex;
   flex-direction: column;
   border: 1px solid #333;
-  @media (max-width: 768px) {
-    min-width: 100%;
-  }
 `;
 
 export const ColumnHeader = styled.div`
-  padding: 15px;
+  padding: 14px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -41,7 +33,7 @@ export const ColumnHeader = styled.div`
   span {
     background: #333;
     padding: 2px 8px;
-    borderradius: 4px;
+    border-radius: 4px;
     fontsize: 12px;
   }
 `;
@@ -57,7 +49,7 @@ export const TaskContainer = styled.div`
 export const TaskCard = styled.div`
   background: #252525;
   border: 1px solid #333;
-  padding: 15px;
+  padding: 14px;
   border-radius: 8px;
   h4 {
     color: #fff;

@@ -1,18 +1,15 @@
 "use client";
 import { useActivities } from "../hooks/useActivities";
 import * as S from "../dashboard/Dashboard.styles";
-import Sidebar from "../sidebar/page";
 import {
   PlusIcon,
   EllipsisVerticalIcon,
   CheckBadgeIcon,
-  Bars3Icon,
 } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { deleteDoc, doc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import * as P from "../projects/ProjectModal.styles";
-import * as D from "../sidebar/SideBar.styles";
 import TaskModal from "./TaskModal";
 
 export default function TasksPage() {

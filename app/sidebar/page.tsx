@@ -1,10 +1,8 @@
 "use client";
 import * as S from "./SideBar.styles";
 import { useEffect, useState } from "react";
-import TaskModal from "../tasks/TaskModal";
 import { useProjects } from "../hooks/useProjects";
-import { useParams, usePathname } from "next/navigation";
-import ProjectModal from "../projects/ProjectModal";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   ChevronDoubleLeftIcon,
@@ -18,8 +16,13 @@ import {
   UserGroupIcon,
   ExclamationTriangleIcon,
   ListBulletIcon,
+  ArrowLeftEndOnRectangleIcon,
 } from "@heroicons/react/24/outline";
 import { motion, AnimatePresence } from "framer-motion";
+import { signOut } from "firebase/auth";
+import { auth, db } from "@/lib/firebase";
+import { useRole } from "../hooks/useRole";
+import { doc, getDoc } from "firebase/firestore";
 
 interface SidebarProps {
   $isMobileOpen: boolean;
@@ -28,16 +31,40 @@ interface SidebarProps {
 
 export default function Sidebar({ $isMobileOpen, onClose }: SidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [isModalOpen, setIsModelOpen] = useState(false);
   const [isProjectOpen, setIsProjectOpen] = useState(false);
+  const [userRole, setUserRole] = useState<string | null>(null);
+  const currentUser = auth.currentUser;
   const pathname = usePathname();
   const { projects, tasks } = useProjects();
+  const router = useRouter();
+  const { isAdmin } = useRole();
 
   useEffect(() => {
     if ($isMobileOpen) {
       onClose();
     }
   }, [pathname]);
+
+  useEffect(() => {
+    const fetchRole = async () => {
+      if (currentUser) {
+        const userDoc = await getDoc(doc(db, "users", currentUser.uid));
+        if (userDoc.exists()) {
+          setUserRole(userDoc.data().role);
+        }
+      }
+    };
+    fetchRole();
+  }, [currentUser]);
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      router.push("/");
+    } catch (error) {
+      console.error("Logout Error:", error);
+    }
+  };
 
   return (
     <>
@@ -127,7 +154,7 @@ export default function Sidebar({ $isMobileOpen, onClose }: SidebarProps) {
                           <span>{proj.name}</span>
                         </div>
                         <span className="badge">
-                          {tasks.filter((t) => t.status === proj.status).length}
+                          {tasks.filter((t) => t.projectId === proj.id).length}
                         </span>
                       </S.ProjectItem>
                     </Link>
@@ -138,21 +165,31 @@ export default function Sidebar({ $isMobileOpen, onClose }: SidebarProps) {
           </AnimatePresence>
         </S.DropdownWrapper>
 
-        <S.NavItem $active={pathname === "/users"} $isCollapsed={isCollapsed}>
-          <UserGroupIcon className="size-6 text-gray-400" />
-          {!isCollapsed && <span>All Users</span>}
-        </S.NavItem>
+        {isAdmin && (
+          <Link
+            href="/users"
+            style={{ textDecoration: "none", color: "inherit" }}
+          >
+            <S.NavItem
+              $active={pathname === "/users"}
+              $isCollapsed={isCollapsed}
+            >
+              <UserGroupIcon className="size-6 text-gray-400" />
+              {!isCollapsed && <span>All Users</span>}
+            </S.NavItem>
+          </Link>
+        )}
         <S.NavItem $active={pathname === "/issues"} $isCollapsed={isCollapsed}>
           <ExclamationTriangleIcon className="size-6 text-gray-400" />
           {!isCollapsed && <span>Issue</span>}
         </S.NavItem>
+        <S.LogoutWrapper>
+          <S.LogoutButton $isCollapsed={isCollapsed} onClick={handleLogout}>
+            <ArrowLeftEndOnRectangleIcon className="size-6" />
+            {!isCollapsed && <span>Logout</span>}
+          </S.LogoutButton>
+        </S.LogoutWrapper>
       </S.SidebarContainer>
-      {isModalOpen &&
-        (pathname == "/tasks" ? (
-          <TaskModal onClose={() => setIsModelOpen(false)} />
-        ) : (
-          <ProjectModal onClose={() => setIsModelOpen(false)} />
-        ))}
     </>
   );
 }

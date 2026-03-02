@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { COLORS, SPACING } from "../global/global.styles";
+import { COLORS, SPACING, device } from "../global/global.styles";
 
 interface SideBarProps {
   $isCollapsed: boolean;
@@ -7,41 +7,43 @@ interface SideBarProps {
 }
 
 export const SidebarContainer = styled.aside<SideBarProps>`
-  position: relative;
+  position: sticky;
+  top: 0;
+  height: 100vh;
   width: ${(props) => (props.$isCollapsed ? "72px" : "264px")};
   min-width: ${(props) => (props.$isCollapsed ? "72px" : "264px")};
-  transition: width 0.3s ease;
+
   display: flex;
   flex-direction: column;
   background: ${COLORS.bg};
-  height: 100vh;
   padding: ${SPACING.lg} 0;
   border-right: 1px solid ${COLORS.border};
-  overflow-x: hidden;
-  @media (max-width: 768px) {
+  overflow-y: auto;
+
+  transition:
+    width 0.3s ease,
+    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  @media ${device.tablet} {
     position: fixed;
     top: 0;
     left: 0;
     z-index: 1000;
 
-    width: ${(props) => (props.$isCollapsed ? "72px" : "264px")};
-    height: 100vh;
+    width: 260px;
+    min-width: 260px;
 
     transform: ${({ $isMobileOpen }) =>
       $isMobileOpen ? "translateX(0)" : "translateX(-100%)"};
 
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: ${({ $isMobileOpen }) =>
       $isMobileOpen ? "20px 0 50px rgba(0, 0, 0, 0.5)" : "none"};
-
-    background: ${COLORS.bg};
-    border-right: 1px solid ${COLORS.border};
   }
 `;
 
 export const MobileOverlay = styled.div`
   display: none;
-  @media (max-width: 768px) {
+  @media (max-width: 1050px) {
     display: block;
     position: fixed;
     top: 0;
@@ -87,17 +89,6 @@ export const NavItem = styled.div<{ $active?: boolean; $isCollapsed: boolean }>`
     props.$active ? "rgba(255, 255, 255, 0.08)" : "transparent"};
   transition: all 0.2s ease;
   border-radius: 8px;
-
-  &::before {
-    content: "";
-    position: absolute;
-    left: -8px;
-    height: 20px;
-    width: 4px;
-    background: ${COLORS.accent};
-    border-radius: 0 4px 4px 0;
-    opacity: ${(props) => (props.$active && !props.$isCollapsed ? "1" : "0")};
-  }
 
   span {
     color: ${(props) => (props.$active ? COLORS.textMain : COLORS.textMuted)};
@@ -198,4 +189,30 @@ export const ProjectItem = styled.div<{ $active?: boolean }>`
       color: ${COLORS.textMain};
     }
   }
+`;
+
+export const LogoutWrapper = styled.div`
+  margin-top: auto;
+  padding-bottom: 14px;
+  border-top: 1px solid #333;
+`;
+
+export const LogoutButton = styled.button<{ $isCollapsed: boolean }>`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 24px;
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.1);
+  }
+
+  justify-content: ${(props) => (props.$isCollapsed ? "center" : "flex-start")};
 `;

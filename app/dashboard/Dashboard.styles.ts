@@ -214,9 +214,11 @@ export const ChartCard = styled.div`
     opacity: 0.8;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 1050px) {
     min-height: 280px;
     padding: ${SPACING.md};
+    margin-left: 16px;
+    margin-bottom: 4px;
   }
 `;
 
