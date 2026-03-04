@@ -1,8 +1,11 @@
 import styled from "styled-components";
-import { THEME, SPACING } from "../global/global.styles";
+import { THEME, SPACING, mindevice, maxdevice } from "../global/global.styles";
 
 export const LayoutContainer = styled.div`
   display: flex;
+  flex-direction: column;
+  padding: 24px;
+  gap: 12px;
   min-height: 100vh;
   width: 100%;
   background: ${THEME.bg};
@@ -14,23 +17,31 @@ export const ContentArea = styled.div`
   display: flex;
   flex-direction: column;
   transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  gap: 24px;
+
+  @media ${mindevice.tablet} {
+    flex-direction: row;
+  }
 `;
 
 export const DashboardContainer = styled.div`
-  padding: ${SPACING.xl};
   background: #${THEME.bg};
   color: ${THEME.textMain};
   flex: 1;
-  @media (max-width: 768px) {
-    padding: ${SPACING.md};
-  }
 `;
 
 export const HeaderRow = styled.div`
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: ${SPACING.xl};
+  width: 100%;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
 `;
 
 export const Title = styled.h2`
@@ -120,11 +131,17 @@ export const IconWrapper = styled.div<{ $status?: string }>`
 export const SectionHeader = styled.div`
   display: flex;
   justify-content: space-between;
+  width: 100%;
   align-items: center;
   margin-bottom: 20px;
 
   h3 {
-    font-size: 18px;
+    font-size: 16px;
+    color: #fff;
+    margin-top: 20px;
+  }
+  p {
+    font-size: 16px;
     color: #fff;
     margin-top: 20px;
   }
@@ -136,6 +153,7 @@ export const SectionHeader = styled.div`
     border-radius: 8px;
     cursor: pointer;
     font-size: 12px;
+    margin-top: 20px;
   }
 `;
 
@@ -163,6 +181,11 @@ export const ActivityMeta = styled.div`
   align-items: center;
   font-size: 11px;
   color: #aaa;
+
+  @media ${maxdevice.tablet} {
+    width: 100%;
+    justify-content: space-between;
+  }
 `;
 
 export const MoreButton = styled.button`
@@ -178,8 +201,6 @@ export const StatsSidebar = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${SPACING.lg};
-  margin-right: ${SPACING.md};
-  margin-top: ${SPACING.lg};
 `;
 
 export const ChartCard = styled.div`

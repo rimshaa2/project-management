@@ -2,11 +2,15 @@ import styled from "styled-components";
 
 export const KanbanBoard = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
+  grid-template-columns: 1fr;
+  gap: 16px;
   width: 100%;
-  padding: 20px;
-  height: calc(100vh -180px);
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 20px;
+    padding: 20px;
+  }
 `;
 
 export const Column = styled.div`

@@ -1,22 +1,33 @@
 "use client";
-import { useActivities } from "../hooks/useActivities";
+import { useTasks } from "../hooks/useTasks";
 import * as S from "../dashboard/Dashboard.styles";
 import {
   PlusIcon,
   EllipsisVerticalIcon,
   CheckBadgeIcon,
+  FolderIcon,
 } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { deleteDoc, doc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import * as P from "../projects/ProjectModal.styles";
 import TaskModal from "./TaskModal";
+import EmptyState from "../components/EmptyState";
+import { useRole } from "../hooks/useRole";
+import { useUsers } from "../hooks/useUsers";
 
 export default function TasksPage() {
-  const { activities, loading } = useActivities();
+  const { tasks, loading } = useTasks();
   const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
   const [editingTask, setEditingTask] = useState<any>(null);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const { isAdmin } = useRole();
+  const { users } = useUsers();
+
+  const getAssigneeName = (uid: string) => {
+    const user = users.find((u) => u.uid === uid);
+    return user ? user.name : "Unassigned";
+  };
 
   const handleDelete = async (id: string) => {
     if (window.confirm("Are you sure you want to delete this task?")) {
@@ -40,13 +51,21 @@ export default function TasksPage() {
         </S.HeaderRow>
         <S.SectionHeader>
           <h3>Task Management</h3>
-          <p>Total Tasks: {activities.length}</p>
+          <p>Total Tasks: {tasks.length}</p>
         </S.SectionHeader>
         <S.ActivityList>
           {loading ? (
             <p>Loading Activites...</p>
+          ) : tasks.length === 0 ? (
+            <EmptyState
+              icon={FolderIcon}
+              title="No tasks yet"
+              description="Start by creating a task to manage your team's tasks."
+              showButton={isAdmin}
+              buttonText="Create Project"
+            />
           ) : (
-            activities.map((activity) => (
+            tasks.map((activity) => (
               <S.ActivityCard key={activity.id}>
                 <S.IconWrapper $status={activity.status}>
                   {activity.status === "completed" ? (
@@ -65,8 +84,8 @@ export default function TasksPage() {
 
                 <S.ActivityMeta>
                   <div style={{ display: "flex", flexDirection: "column" }}>
-                    <span>By: {activity.createdByName}</span>
-                    <span>To: {activity.assignedTo}</span>
+                    <span>By: {getAssigneeName(activity.createdBy)}</span>
+                    <span>To: {getAssigneeName(activity.assignedTo)}</span>
                   </div>
                   <div style={{ position: "relative", marginLeft: "15px" }}>
                     <EllipsisVerticalIcon

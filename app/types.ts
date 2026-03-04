@@ -1,7 +1,9 @@
+import { auth } from "../lib/firebase";
+
 export enum Status {
   PENDING = "pending",
   PROCESS = "process",
-  COMPLETED = "completed",
+  COMPLETED = "Completed",
 }
 
 export enum UserRole {
@@ -15,6 +17,7 @@ export type UserProfile = {
   password: string;
   role: UserRole;
   name: string;
+  createdBy: string;
 };
 
 export type Task = {
@@ -27,6 +30,7 @@ export type Task = {
   startDate: string;
   endDate: string;
   updatedAt?: any;
+  createdBy: string;
 };
 
 export type Project = {
@@ -34,9 +38,11 @@ export type Project = {
   name: string;
   description: string;
   clientName: string;
-  status: Status;
+  status?: Status;
   startDate: string;
   endDate: string;
   createdAt?: any;
   updatedAt?: any;
+  createdBy: string;
+  members: string[];
 };

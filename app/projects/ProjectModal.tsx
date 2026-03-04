@@ -9,6 +9,7 @@ import { Project, Status } from "../types";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useForm, Controller } from "react-hook-form";
 import FormInput from "../global/FormInput";
+import { auth } from "@/lib/firebase";
 
 interface TaskModalProps {
   onClose: () => void;
@@ -34,10 +35,20 @@ export default function TaskModal({ onClose, project }: TaskModalProps) {
 
   const onSubmit = async (data: Project) => {
     let success;
+    const currentUser = auth.currentUser;
+
+    if (!currentUser) return;
+    const projectData = {
+      ...data,
+      status: Status.PENDING,
+      createdBy: currentUser.uid,
+      members: [currentUser.uid],
+      createdAt: new Date().toISOString,
+    };
     if (isEditMode && project?.id) {
-      success = await updateProject(project.id, data);
+      success = await updateProject(project.id, projectData);
     } else {
-      success = await createProject(data);
+      success = await createProject(projectData);
     }
 
     if (success) {
@@ -82,35 +93,8 @@ export default function TaskModal({ onClose, project }: TaskModalProps) {
               control={control}
               required
               rules={{ required: "Client name is required" }}
+              placeholder="Client Name"
             />
-
-            <S.FormGroup>
-              <label>Status</label>
-              <Controller
-                name="status"
-                control={control}
-                render={({ field }) => (
-                  <select
-                    {...field}
-                    style={{
-                      padding: "16px",
-                      background: "#1e1e1e",
-                      color: "white",
-                      borderRadius: "8px",
-                      appearance: "none",
-                      backgroundImage: `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3e%3cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3e%3c/svg%3e")`,
-                      backgroundRepeat: "no-repeat",
-                      backgroundPosition: "right 14px center",
-                      backgroundSize: "16px",
-                    }}
-                  >
-                    <option value="pending">Pending</option>
-                    <option value="process">In Process</option>
-                    <option value="completed">Completed</option>
-                  </select>
-                )}
-              />
-            </S.FormGroup>
           </S.Row>
 
           <S.Row>

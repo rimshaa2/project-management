@@ -85,6 +85,7 @@ export default function UsersPage() {
           name: data.name,
           email: data.email,
           role: "user",
+          createdBy: auth.currentUser?.uid,
           createdAt: new Date().toISOString(),
         });
         await signOut(secondaryAuth);
@@ -118,11 +119,13 @@ export default function UsersPage() {
           ) : (
             users.map((user) => (
               <S.UserCard key={user.uid}>
-                <UserIcon className="size-5 text-white" />
-                <div>
-                  <h4>{user.name}</h4>
-                  <p>{user.email}</p>
-                  <S.RoleBadge $role={user.role}>{user.role}</S.RoleBadge>
+                <div className="flex gap-4">
+                  <UserIcon className="size-4 text-white" />
+                  <div>
+                    <h4>{user.name}</h4>
+                    <p>{user.email}</p>
+                    <S.RoleBadge $role={user.role}>{user.role}</S.RoleBadge>
+                  </div>
                 </div>
                 <S.ActionGroup>
                   <S.IconButton onClick={() => handleEditClick(user)}>

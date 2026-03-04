@@ -6,12 +6,14 @@ import {
   orderBy,
   deleteDoc,
   doc,
+  where,
 } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { auth, db } from "@/lib/firebase";
 
 export function useUsers() {
   const [users, setUsers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const currentUser = auth.currentUser;
 
   const deleteUser = async (uid: string) => {
     if (
@@ -28,14 +30,27 @@ export function useUsers() {
   };
 
   useEffect(() => {
-    const q = query(collection(db, "users"), orderBy("createdAt", "desc"));
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const userList = snapshot.docs.map((doc) => ({ ...doc.data() }));
-      setUsers(userList);
-      setLoading(false);
-    });
+    if (!currentUser) return;
+
+    const q = query(
+      collection(db, "users"),
+      where("createdBy", "==", currentUser.uid),
+    );
+
+    const unsubscribe = onSnapshot(
+      q,
+      (snapshot) => {
+        setUsers(snapshot.docs.map((doc) => ({ ...doc.data() })));
+        setLoading(false);
+      },
+      (error) => {
+        console.error("USER FETCH ERROR:", error.code, error.message);
+        setLoading(false);
+      },
+    );
+
     return () => unsubscribe();
-  }, []);
+  }, [currentUser]);
 
   return { users, loading, deleteUser };
 }

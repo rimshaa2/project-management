@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { THEME, SPACING } from "../global/global.styles";
+import { THEME, SPACING, mindevice } from "../global/global.styles";
 
 export const PageContainer = styled.div`
   padding: ${SPACING.xl};
@@ -7,9 +7,16 @@ export const PageContainer = styled.div`
 
 export const HeaderRow = styled.div`
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
   margin-bottom: ${SPACING.xl};
+
+  @media ${mindevice.laptop} {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
 `;
 
 export const Title = styled.h2`
@@ -21,8 +28,11 @@ export const Title = styled.h2`
 
 export const UserGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
   gap: ${SPACING.lg};
+  @media ${mindevice.mobile} {
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  }
 `;
 
 export const UserCard = styled.div`
@@ -31,7 +41,7 @@ export const UserCard = styled.div`
   padding: ${SPACING.lg};
   border-radius: 12px;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   gap: ${SPACING.md};
   transition: transform 0.2s;
 
@@ -82,6 +92,7 @@ export const ModalOverlay = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 20px;
   z-index: 9999;
 `;
 
@@ -92,7 +103,16 @@ export const ModalContent = styled.div`
   border-radius: 16px;
   width: 100%;
   max-width: 450px;
+  max-height: 90vh;
+  overflow-y: auto;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 10px;
+  }
 `;
 
 export const InputGroup = styled.div`
@@ -145,6 +165,19 @@ export const ButtonGroup = styled.div`
   justify-content: flex-end;
   gap: ${SPACING.md};
   margin-top: ${SPACING.xl};
+  flex-direction: column-reverse;
+
+  @media ${mindevice.mobile} {
+    flex-direction: row;
+    justify-content: flex-end;
+    text: center;
+  }
+  button {
+    width: 100%;
+    @media ${mindevice.mobile} {
+      width: auto;
+    }
+  }
 `;
 
 export const SecondaryButton = styled.button`
@@ -163,6 +196,7 @@ export const SecondaryButton = styled.button`
 export const SubmitButton = styled(PrimaryButton)`
   background: #fff;
   width: auto;
+  padding: 10px 18px;
 
   &:disabled {
     background: #555;

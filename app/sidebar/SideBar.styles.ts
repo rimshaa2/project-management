@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { COLORS, SPACING, device } from "../global/global.styles";
+import { COLORS, SPACING, maxdevice } from "../global/global.styles";
 
 interface SideBarProps {
   $isCollapsed: boolean;
@@ -24,7 +24,7 @@ export const SidebarContainer = styled.aside<SideBarProps>`
     width 0.3s ease,
     transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
-  @media ${device.tablet} {
+  @media ${maxdevice.tablet} {
     position: fixed;
     top: 0;
     left: 0;

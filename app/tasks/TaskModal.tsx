@@ -1,9 +1,10 @@
 "use client";
+
 import { useEffect } from "react";
 import * as S from "./TaskModal.styles";
 import { useCreateTask } from "../hooks/useCreateTask";
 import { useProjects } from "../hooks/useProjects";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { useUpdateTask } from "../hooks/useUpdateTask";
 import {
   ClockIcon,
@@ -12,10 +13,13 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { Status, Task } from "../types";
+import FormInput from "../global/FormInput";
+import { auth } from "@/lib/firebase";
+import { useUsers } from "../hooks/useUsers";
 
 interface TaskModalProps {
   onClose: () => void;
-  task?: Task;
+  task?: Partial<Task>;
 }
 
 export default function TaskModal({ onClose, task }: TaskModalProps) {
@@ -23,15 +27,9 @@ export default function TaskModal({ onClose, task }: TaskModalProps) {
   const { projects } = useProjects();
   const { createTask, loading } = useCreateTask();
   const { updateTask } = useUpdateTask();
+  const { users } = useUsers();
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    watch,
-    setValue,
-    formState: { errors },
-  } = useForm<Task>({
+  const { handleSubmit, control, reset, watch, setValue } = useForm<Task>({
     defaultValues: { status: Status.PENDING },
   });
 
@@ -52,10 +50,18 @@ export default function TaskModal({ onClose, task }: TaskModalProps) {
 
   const onSubmit = async (data: Task) => {
     let success;
+    const currentUser = auth.currentUser;
+
+    if (!currentUser) return;
+    const taskData = {
+      ...data,
+      createdBy: currentUser.uid,
+      createdAt: new Date().toISOString(),
+    };
     if (isEditMode && task?.id) {
-      success = await updateTask(task.id, data);
+      success = await updateTask(task.id, taskData);
     } else {
-      success = await createTask(data);
+      success = await createTask(taskData);
     }
 
     if (success) {
@@ -77,129 +83,159 @@ export default function TaskModal({ onClose, task }: TaskModalProps) {
         </S.Header>
 
         <form onSubmit={handleSubmit(onSubmit)}>
-          <S.FormGroup>
-            <S.RequiredLabel>Name</S.RequiredLabel>
-            <input
-              {...register("name", { required: "Task name is required" })}
-              placeholder="Task name"
-            />
-            {errors.name && (
-              <span style={{ color: "#ff4d4d", fontSize: "12px" }}>
-                {errors.name.message}
-              </span>
-            )}
-          </S.FormGroup>
+          <FormInput
+            name="name"
+            label="Task Name"
+            control={control}
+            required
+            rules={{ required: "Task name is required" }}
+            placeholder="Task name"
+          />
 
-          <S.FormGroup>
-            <label>Description</label>
-            <input
-              {...register("description")}
-              placeholder="Task description"
-            />
-          </S.FormGroup>
+          <FormInput
+            name="description"
+            label="Description"
+            control={control}
+            placeholder="Task description"
+          />
 
           <S.Row>
             <S.FormGroup>
               <S.RequiredLabel>Assigned Project</S.RequiredLabel>
-              <select
-                {...register("projectId", {
-                  required: "Project selection is required",
-                })}
-                style={{
-                  background: "#1e1e1e",
-                  color: "white",
-                  padding: "14px",
-                  paddingRight: "40px",
-                  borderRadius: "8px",
-                  appearance: "none",
-                  backgroundImage: `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3e%3cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3e%3c/svg%3e")`,
-                  backgroundRepeat: "no-repeat",
-                  backgroundPosition: "right 14px center",
-                  backgroundSize: "16px",
-                }}
-              >
-                <option value="">Select a Project</option>
-                {projects.map((proj) => (
-                  <option key={proj.id} value={proj.id}>
-                    {proj.name}
-                  </option>
-                ))}
-              </select>
-              {errors.projectId && (
-                <span style={{ color: "#ff4d4d", fontSize: "12px" }}>
-                  {errors.projectId.message}
-                </span>
-              )}
+              <Controller
+                name="projectId"
+                control={control}
+                rules={{ required: "Project selection is required" }}
+                render={({ field, fieldState: { error } }) => (
+                  <>
+                    <select
+                      {...field}
+                      disabled={!!task?.projectId && !task.id}
+                      style={{
+                        background: "#1e1e1e",
+                        color: "white",
+                        padding: "14px",
+                        paddingRight: "40px",
+                        borderRadius: "8px",
+                        appearance: "none",
+                        backgroundImage: `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3e%3cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3e%3c/svg%3e")`,
+                        backgroundRepeat: "no-repeat",
+                        backgroundPosition: "right 14px center",
+                        backgroundSize: "16px",
+                        border: error ? "1px solid #ff4d4d" : "1px solid #333",
+                      }}
+                    >
+                      <option value="">Select a Project</option>
+                      {projects.map((proj) => (
+                        <option key={proj.id} value={proj.id}>
+                          {proj.name}
+                        </option>
+                      ))}
+                    </select>
+                    {error && (
+                      <span
+                        style={{
+                          color: "#ff4d4d",
+                          fontSize: "12px",
+                          marginTop: "4px",
+                        }}
+                      >
+                        {error.message}
+                      </span>
+                    )}
+                  </>
+                )}
+              />
             </S.FormGroup>
 
             <S.FormGroup>
               <S.RequiredLabel>Assigned To</S.RequiredLabel>
-              <input
-                type="text"
-                {...register("assignedTo", {
-                  required: "Assignee is required",
-                })}
+              <Controller
+                name="assignedTo"
+                control={control}
+                rules={{ required: "Please assign this task to someone" }}
+                render={({ field, fieldState: { error } }) => (
+                  <>
+                    <select
+                      {...field}
+                      style={{
+                        background: "#1e1e1e",
+                        color: "white",
+                        padding: "14px",
+                        borderRadius: "8px",
+                        appearance: "none",
+                        border: error ? "1px solid #ff4d4d" : "1px solid #333",
+                        backgroundImage: `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3e%3cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3e%3c/svg%3e")`,
+                        backgroundRepeat: "no-repeat",
+                        backgroundPosition: "right 14px center",
+                        backgroundSize: "16px",
+                      }}
+                    >
+                      <option value="">Select a team member</option>
+                      {users.map((user) => (
+                        <option key={user.uid} value={user.uid}>
+                          {user.name} ({user.role})
+                        </option>
+                      ))}
+                    </select>
+                    {error && (
+                      <span
+                        style={{
+                          color: "#ff4d4d",
+                          fontSize: "12px",
+                          marginTop: "4px",
+                        }}
+                      >
+                        {error.message}
+                      </span>
+                    )}
+                  </>
+                )}
               />
-              {errors.assignedTo && (
-                <span style={{ color: "#ff4d4d", fontSize: "12px" }}>
-                  {errors.assignedTo.message}
-                </span>
-              )}
             </S.FormGroup>
           </S.Row>
 
           <S.Row>
-            <S.FormGroup>
-              <label>Start Date</label>
-              <S.DateInputWrapper>
-                <input type="date" {...register("startDate")} />
-              </S.DateInputWrapper>
-            </S.FormGroup>
+            <FormInput
+              name="startDate"
+              label="Start Date"
+              type="date"
+              control={control}
+            />
 
-            <S.FormGroup>
-              <label>End Date</label>
-              <S.DateInputWrapper>
-                <input
-                  type="date"
-                  {...register("endDate", {
-                    validate: (value) =>
-                      !startDate ||
-                      !value ||
-                      new Date(value) >= new Date(startDate) ||
-                      "End date cannot be earlier than start date",
-                  })}
-                />
-              </S.DateInputWrapper>
-              {errors.endDate && (
-                <span style={{ color: "#ff4d4d", fontSize: "12px" }}>
-                  {errors.endDate.message}
-                </span>
-              )}
-            </S.FormGroup>
+            <FormInput
+              name="endDate"
+              label="End Date"
+              type="date"
+              control={control}
+              rules={{
+                validate: (value: string) =>
+                  !startDate ||
+                  !value ||
+                  new Date(value) >= new Date(startDate) ||
+                  "End date cannot be earlier than start date",
+              }}
+            />
           </S.Row>
 
-          <S.StatusGrid>
-            {Object.entries(statusConfig).map(([s, Config]) => {
-              const Icon = Config.icon;
+          <S.StatusButtonGroup>
+            {Object.entries(statusConfig).map(([s, config]) => {
+              const Icon = config.icon;
               const isActive = currentStatus === s;
+
               return (
-                <S.StatusCard
+                <S.StatusItem
                   key={s}
                   $active={isActive}
-                  $statusColor={Config.color}
+                  $statusColor={config.color}
                   onClick={() => setValue("status", s as Status)}
                 >
-                  <Icon
-                    className="size-5"
-                    style={{
-                      color: isActive ? "#fff" : Config.color,
-                    }}
-                  />
-                  <p>{s.toUpperCase()}</p>
-                </S.StatusCard>
+                  <Icon />
+                  <p>{s}</p>
+                </S.StatusItem>
               );
             })}
-          </S.StatusGrid>
+          </S.StatusButtonGroup>
 
           <S.SubmitButton type="submit" disabled={loading}>
             {loading ? "SAVING.." : isEditMode ? "UPDATE TASK" : "ADD TASK"}

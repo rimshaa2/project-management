@@ -15,12 +15,11 @@ export const Overlay = styled.div`
 
 export const ModalContainer = styled.div`
   background: #121212;
-  width: 90%;
-  max-width: 600px;
-  padding: 40px;
-  border-radius: 24px;
-  border: 1px solid #333;
-  color: #fff;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 24px;
+  border-radius: 16px;
+  position: relative;
 `;
 
 export const Header = styled.div`
@@ -59,7 +58,14 @@ export const FormGroup = styled.div`
 
 export const Row = styled.div`
   display: flex;
-  gap: 20px;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 20px;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    gap: 20px;
+  }
 `;
 
 export const StatusGrid = styled.div`
@@ -139,8 +145,15 @@ export const HelperText = styled.p`
 
 export const ProjectGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 20px;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  width: 100%;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 20px;
+    padding: 20px;
+  }
 `;
 
 export const ProjectCard = styled.div`

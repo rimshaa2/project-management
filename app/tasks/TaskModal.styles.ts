@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { mindevice } from "../global/global.styles";
 
 export const Overlay = styled.div`
   position: fixed;
@@ -15,12 +16,18 @@ export const Overlay = styled.div`
 
 export const ModalContainer = styled.div`
   background: #121212;
-  width: 90%;
+  width: 95%;
   max-width: 600px;
-  padding: 40px;
-  border-radius: 24px;
-  border: 1px solid #333;
-  color: #fff;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 24px;
+  border-radius: 16px;
+  position: relative;
+
+  @media ${mindevice.tablet} {
+    width: 100%;
+    padding: 32px;
+  }
 `;
 
 export const Header = styled.div`
@@ -65,53 +72,75 @@ export const FormGroup = styled.div`
 
 export const Row = styled.div`
   display: flex;
-  gap: 20px;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 20px;
+
+  @media ${mindevice.tablet} {
+    flex-direction: row;
+    gap: 20px;
+  }
 `;
 
-export const StatusGrid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 15px;
-  margin: 20px 0;
+export const StatusButtonGroup = styled.div`
+  display: flex;
+  background: #1a1a1a;
+  padding: 4px;
+  border-radius: 10px;
+  border: 1px solid #333;
+  width: 100%;
+  margin-top: 24px;
+
+  @media (max-width: 400px) {
+    flex-wrap: wrap;
+  }
 `;
 
-export const StatusCard = styled.div<{
+export const StatusItem = styled.div<{
   $active: boolean;
   $statusColor: string;
 }>`
+  flex: 1;
   display: flex;
-  flex-direction: column;
+  min-width: 80px;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 16px;
-  background: ${(props) => (props.$active ? props.$statusColor : "#1e1e1e")};
-  border: 1px solid ${(props) => (props.$active ? props.$statusColor : "#333")};
-  border-radius: 12px;
+  padding: 8px 12px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+  background: ${(props) =>
+    props.$active ? `${props.$statusColor}20` : "transparent"};
+  border: 1px solid
+    ${(props) => (props.$active ? props.$statusColor : "transparent")};
+
+  svg {
+    width: 16px;
+    height: 16px;
+    color: ${(props) => (props.$active ? props.$statusColor : "#666")};
+    transition: color 0.2s ease;
+  }
 
   p {
     font-size: 11px;
-    font-weight: 700;
-    margin: 0;
-    color: ${(props) => (props.$active ? "#fff" : "#888")};
-  }
-
-  svg {
-    transition: transform 0.2s ease;
+    @media ${mindevice.tablet} {
+      font-size: 13px;
+    }
   }
 
   &:hover {
-    border-color: ${(props) => props.$statusColor};
-    transform: translateY(-2px);
-  }
+    background: ${(props) =>
+      props.$active ? `${props.$statusColor}30` : "#252525"};
 
-  ${(props) =>
-    props.$active &&
-    `
-    box-shadow: 0 4px 15px ${props.$statusColor}44; 
-  `}
+    p {
+      color: #fff;
+    }
+    svg {
+      color: ${(props) => props.$statusColor};
+    }
+  }
 `;
 
 export const SubmitButton = styled.button`
@@ -172,7 +201,7 @@ export const RequiredLabel = styled.label`
 
   &::after {
     content: " *";
-    color: #ef4444; /* A bright red color */
+    color: #ef4444;
     font-weight: bold;
   }
 `;
