@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { db } from "../../lib/firebase";
-import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { Project } from "../types";
 
 export const useUpdateProject = () => {
@@ -14,7 +14,7 @@ export const useUpdateProject = () => {
       const projectRef = doc(db, "projects", id);
       await updateDoc(projectRef, {
         ...data,
-        updatedAt: serverTimestamp(),
+        updatedAt: new Date(),
       });
       setLoading(false);
       return true;

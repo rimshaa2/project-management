@@ -1,5 +1,5 @@
+import { styled } from "styled-components";
 import * as S from "../projects/ProjectModal.styles";
-import * as T from "../tasks/TaskModal.styles";
 import { Control, Controller, RegisterOptions } from "react-hook-form";
 
 type FormInputProps = {
@@ -30,7 +30,7 @@ const FormInput = ({
       render={({ field, fieldState: { error } }) => (
         <S.FormGroup>
           {required ? (
-            <T.RequiredLabel>{label}</T.RequiredLabel>
+            <RequiredLabel>{label}</RequiredLabel>
           ) : (
             <label>{label}</label>
           )}
@@ -48,3 +48,15 @@ const FormInput = ({
 };
 
 export default FormInput;
+
+const RequiredLabel = styled.label`
+  color: #ccc;
+  font-size: 0.85rem;
+  display: block;
+
+  &::after {
+    content: " *";
+    color: #ef4444;
+    font-weight: bold;
+  }
+`;

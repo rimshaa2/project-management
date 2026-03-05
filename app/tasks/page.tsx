@@ -11,16 +11,17 @@ import { useState } from "react";
 import { deleteDoc, doc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import * as P from "../projects/ProjectModal.styles";
-import TaskModal from "./TaskModal";
 import EmptyState from "../components/EmptyState";
 import { useRole } from "../hooks/useRole";
 import { useUsers } from "../hooks/useUsers";
+import ModalManager from "../components/modals/ModalManager";
 
 export default function TasksPage() {
   const { tasks, loading } = useTasks();
   const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
-  const [editingTask, setEditingTask] = useState<any>(null);
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [modalConfig, setModalConfig] = useState<{ type: any; data?: any }>({
+    type: null,
+  });
   const { isAdmin } = useRole();
   const { users } = useUsers();
 
@@ -43,7 +44,7 @@ export default function TasksPage() {
     <S.LayoutContainer>
       <S.HeaderRow>
         <S.Title>Tasks</S.Title>
-        <S.PrimaryButton onClick={() => setIsCreateModalOpen(true)}>
+        <S.PrimaryButton onClick={() => setModalConfig({ type: "task" })}>
           <PlusIcon className="size-5" />
           New Task
         </S.PrimaryButton>
@@ -64,7 +65,8 @@ export default function TasksPage() {
             title="No tasks yet"
             description="Start by creating a task to manage your team's tasks."
             showButton={isAdmin}
-            buttonText="Create Project"
+            buttonText="Create Task"
+            onButtonClick={() => setModalConfig({ type: "task" })}
           />
         ) : (
           tasks.map((activity) => (
@@ -102,7 +104,10 @@ export default function TasksPage() {
                     <P.ActionMenu>
                       <button
                         onClick={() => {
-                          setEditingTask(activity);
+                          setModalConfig({
+                            type: "task",
+                            data: activity,
+                          });
                           setActiveMenuId(null);
                         }}
                       >
@@ -122,12 +127,11 @@ export default function TasksPage() {
           ))
         )}
       </S.ActivityList>
-      {isCreateModalOpen && (
-        <TaskModal onClose={() => setIsCreateModalOpen(false)} />
-      )}
-      {editingTask && (
-        <TaskModal task={editingTask} onClose={() => setEditingTask(null)} />
-      )}
+      <ModalManager
+        type={modalConfig.type}
+        data={modalConfig.data}
+        onClose={() => setModalConfig({ type: null })}
+      />
     </S.LayoutContainer>
   );
 }

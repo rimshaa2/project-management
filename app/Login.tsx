@@ -5,12 +5,15 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import styled from "styled-components";
-import { THEME, SPACING } from "./global/global.styles";
 import { useForm } from "react-hook-form";
 import { UserProfile } from "./types";
 import FormInput from "./global/FormInput";
 
-export default function Login() {
+type LoginProps = {
+  onSuccess: () => void;
+};
+
+export default function Login({ onSuccess }: LoginProps) {
   const router = useRouter();
   const [authError, setAuthError] = useState<string | null>(null);
   const {
@@ -24,6 +27,7 @@ export default function Login() {
     try {
       await signInWithEmailAndPassword(auth, data.email, data.password);
       router.push("/dashboard");
+      onSuccess();
     } catch (error) {
       console.error("Login error:", error);
       if (error instanceof Error && "code" in error) {
@@ -41,9 +45,7 @@ export default function Login() {
   };
 
   return (
-    <Card>
-      <Title>Welcome Back</Title>
-      <Subtitle>Please enter your details to sign in.</Subtitle>
+    <>
       {authError && <ErrorMessage>{authError}</ErrorMessage>}
       <form onSubmit={handleSubmit(handleLogin)}>
         <FormInput
@@ -73,37 +75,9 @@ export default function Login() {
           Login
         </SubmitButton>
       </form>
-    </Card>
+    </>
   );
 }
-
-const Card = styled.div`
-  background: ${THEME.surface};
-  padding: 40px;
-  width: 90%;
-  max-width: 420px;
-  border: 1px solid ${THEME.surfaceLight};
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
-  border-radius: 8px;
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-`;
-
-const Title = styled.div`
-  color: white;
-  font-size: 1.8rem;
-  font-weight: 700;
-  text-align: center;
-`;
-
-const Subtitle = styled.div`
-  color: #888;
-  font-size: 0.9rem;
-  text-align: center;
-`;
 
 const SubmitButton = styled.button`
   width: 100%;

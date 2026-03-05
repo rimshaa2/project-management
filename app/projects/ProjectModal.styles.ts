@@ -1,33 +1,4 @@
 import styled from "styled-components";
-import { mindevice } from "../global/global.styles";
-
-export const Overlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.8);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-`;
-
-export const ModalContainer = styled.div`
-  background: #121212;
-  max-height: 90vh;
-  overflow-y: auto;
-  padding: 24px;
-  border-radius: 16px;
-  position: relative;
-
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-`;
 
 export const FormGroup = styled.div`
   display: flex;
@@ -50,87 +21,6 @@ export const FormGroup = styled.div`
       border-color: #555;
     }
   }
-`;
-
-export const Row = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-
-  @media ${mindevice.tablet} {
-    flex-direction: row;
-    gap: 20px;
-  }
-`;
-
-export const StatusGrid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 15px;
-`;
-
-export const StatusCard = styled.div<{ $active?: boolean }>`
-  background: #1e1e1e;
-  padding: 20px;
-  border-radius: 12px;
-  text-align: center;
-  border: 2px solid ${(props) => (props.$active ? "#fff" : "#333")};
-  cursor: pointer;
-  transition: all 0.2s;
-  p {
-    font-size: 14px;
-    color: ${(props) => (props.$active ? "#fff" : "#888")};
-  }
-`;
-
-export const SubmitButton = styled.button`
-  width: 100%;
-  padding: 16px;
-  background: #1e1e1e;
-  border: 1px solid #333;
-  color: white;
-  border-radius: 12px;
-  font-size: 18px;
-  cursor: pointer;
-  &:hover {
-    background: #252525;
-  }
-`;
-
-export const DateInputWrapper = styled.div`
-  input[type="date] {
-    color-scheme: dark;
-    width: 100%;
-    padding: 10px;
-    background: #1e1e1e;
-    border: 1px solid #333;
-    border-radius: 8px;
-    color: white;
-    &::-webkit-calendar-picker-indicator {
-      cursor: pointer;
-      filter: invert(1); 
-    }
-
-  }
-`;
-
-export const FooterInfo = styled.div`
-  display: flex;
-  gap: 10px;
-`;
-
-export const UserBadge = styled.div`
-  background: #1e1e1e;
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-size: 12px;
-  color: #ccc;
-`;
-
-export const HelperText = styled.p`
-  font-size: 11px;
-  color: #666;
-  line-height: 1.4;
 `;
 
 export const ProjectGrid = styled.div`
@@ -173,7 +63,7 @@ export const CardHeader = styled.div`
   }
 `;
 
-export const Dscription = styled.div`
+export const Description = styled.div`
   font-size: 13px;
   color: #888;
   line-height: 1.5;

@@ -16,18 +16,17 @@ import {
 import { useState } from "react";
 import { deleteDoc, doc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import ProjectModal from "./ProjectModal";
 import Link from "next/link";
 import { useRole } from "../hooks/useRole";
-import TaskModal from "../tasks/TaskModal";
 import EmptyState from "../components/EmptyState";
+import ModalManager from "../components/modals/ModalManager";
 
 export default function ProjectPage() {
   const { projects, tasks, loading } = useProjects();
-  const [editingProject, setEditingProject] = useState<any>(null);
   const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [quickTaskProject, setQuickTaskProject] = useState<any>(null);
+  const [modalConfig, setModalConfig] = useState<{ type: any; data?: any }>({
+    type: null,
+  });
 
   const { isAdmin } = useRole();
 
@@ -42,7 +41,7 @@ export default function ProjectPage() {
       <D.HeaderRow>
         <D.Title>Projects</D.Title>
         {isAdmin && (
-          <D.PrimaryButton onClick={() => setIsCreateModalOpen(true)}>
+          <D.PrimaryButton onClick={() => setModalConfig({ type: "project" })}>
             <PlusIcon className="size-5" />
             New Project
           </D.PrimaryButton>
@@ -62,7 +61,7 @@ export default function ProjectPage() {
           description="Start by creating a project to manage your team's tasks."
           showButton={isAdmin}
           buttonText="Create Project"
-          onButtonClick={() => setIsCreateModalOpen(true)}
+          onButtonClick={() => setModalConfig({ type: "project" })}
         />
       ) : (
         <S.ProjectGrid>
@@ -88,7 +87,10 @@ export default function ProjectPage() {
                         onClick={(e) => {
                           e.preventDefault();
                           e.stopPropagation();
-                          setQuickTaskProject(project);
+                          setModalConfig({
+                            type: "task",
+                            data: { projectId: project.id },
+                          });
                         }}
                         style={{
                           background: "none",
@@ -116,7 +118,7 @@ export default function ProjectPage() {
                         <button
                           onClick={(e) => {
                             e.preventDefault();
-                            setEditingProject(project);
+                            setModalConfig({ type: "project", data: project });
                             setActiveMenuId(null);
                           }}
                         >
@@ -137,9 +139,9 @@ export default function ProjectPage() {
                   </div>
                 </S.CardHeader>
 
-                <S.Dscription>
+                <S.Description>
                   {project.description || "No description provided"}
-                </S.Dscription>
+                </S.Description>
 
                 <S.StatsRow>
                   <S.Badge
@@ -175,23 +177,11 @@ export default function ProjectPage() {
         </S.ProjectGrid>
       )}
 
-      {isCreateModalOpen && (
-        <ProjectModal onClose={() => setIsCreateModalOpen(false)} />
-      )}
-
-      {editingProject && (
-        <ProjectModal
-          project={editingProject}
-          onClose={() => setEditingProject(null)}
-        />
-      )}
-
-      {quickTaskProject && (
-        <TaskModal
-          onClose={() => setQuickTaskProject(null)}
-          task={{ projectId: quickTaskProject.id } as any}
-        />
-      )}
+      <ModalManager
+        type={modalConfig.type}
+        data={modalConfig.data}
+        onClose={() => setModalConfig({ type: null })}
+      />
     </D.LayoutContainer>
   );
 }

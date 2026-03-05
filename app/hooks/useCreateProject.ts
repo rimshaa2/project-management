@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { db, auth } from "@/lib/firebase";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { addDoc, collection } from "firebase/firestore";
 import { Project } from "../types";
 
 export const useCreateProject = () => {
@@ -18,7 +18,7 @@ export const useCreateProject = () => {
 
       await addDoc(projectRef, {
         ...data,
-        createdAt: serverTimestamp(),
+        createdAt: new Date(),
       });
       setLoading(false);
       return true;

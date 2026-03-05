@@ -4,12 +4,16 @@ import { auth, db } from "@/lib/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
-import * as S from "./Register.styles";
 import { useForm } from "react-hook-form";
-import { Status, UserProfile, UserRole } from "../types";
+import { UserProfile, UserRole } from "../types";
 import FormInput from "../global/FormInput";
+import { styled } from "styled-components";
 
-export default function Register() {
+type RegisterFormProps = {
+  onSuccess: () => void;
+};
+
+export default function RegisterForm({ onSuccess }: RegisterFormProps) {
   const router = useRouter();
   const {
     control,
@@ -35,63 +39,82 @@ export default function Register() {
         createdBy: auth.currentUser?.uid,
       });
       router.push("/dashboard");
+      onSuccess();
     } catch (error: any) {
       console.error("Register error: ", error);
       alert(error.message);
     }
   };
   return (
-    <S.Container>
-      <S.Title>Add Users</S.Title>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <FormInput
-          name="name"
-          label="Name"
-          control={control}
-          placeholder="Enter your name..."
-          rules={{ required: "Name is required" }}
-        />
-        <FormInput
-          name="email"
-          label="Email"
-          control={control}
-          required
-          placeholder="Enter your email..."
-          rules={{
-            required: "Email is required",
-            pattern: {
-              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-              message: "Invalid email address",
-            },
-          }}
-        />
-        <FormInput
-          name="password"
-          label="Password"
-          type="password"
-          control={control}
-          required
-          placeholder="Enter your password..."
-          rules={{
-            required: "Password is required",
-            minLength: { value: 6, message: "Minimum 6 characters" },
-            validate: {
-              hasUppercase: (value: string) =>
-                /[A-Z]/.test(value) ||
-                "Must include at least one uppercase letter",
-              hasNumber: (value: string) =>
-                /[0-9]/.test(value) || "Must include at least one number",
-              hasSpecial: (value: string) =>
-                /[!@#$%^&*(),.?":{}|<>]/.test(value) ||
-                "Must include at least one special character",
-            },
-          }}
-        />
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <FormInput
+        name="name"
+        label="Name"
+        control={control}
+        placeholder="Enter your name..."
+        rules={{ required: "Name is required" }}
+      />
+      <FormInput
+        name="email"
+        label="Email"
+        control={control}
+        required
+        placeholder="Enter your email..."
+        rules={{
+          required: "Email is required",
+          pattern: {
+            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+            message: "Invalid email address",
+          },
+        }}
+      />
+      <FormInput
+        name="password"
+        label="Password"
+        type="password"
+        control={control}
+        required
+        placeholder="Enter your password..."
+        rules={{
+          required: "Password is required",
+          minLength: { value: 6, message: "Minimum 6 characters" },
+          validate: {
+            hasUppercase: (value: string) =>
+              /[A-Z]/.test(value) ||
+              "Must include at least one uppercase letter",
+            hasNumber: (value: string) =>
+              /[0-9]/.test(value) || "Must include at least one number",
+            hasSpecial: (value: string) =>
+              /[!@#$%^&*(),.?":{}|<>]/.test(value) ||
+              "Must include at least one special character",
+          },
+        }}
+      />
 
-        <S.SubmitButton type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "Adding..." : "Add User"}
-        </S.SubmitButton>
-      </form>
-    </S.Container>
+      <SubmitButton type="submit" disabled={isSubmitting}>
+        {isSubmitting ? "Adding..." : "Add User"}
+      </SubmitButton>
+    </form>
   );
 }
+
+const SubmitButton = styled.button`
+  width: 100%;
+  background: #222;
+  color: white;
+  padding: 16px;
+  border-radius: 12px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 1rem;
+  &:hover {
+    background: #2a2a2a;
+  }
+`;
+
+const ErrorText = styled.span`
+  color: #ff4d4d;
+  font-size: 11px;
+  font-weight: 500;
+`;

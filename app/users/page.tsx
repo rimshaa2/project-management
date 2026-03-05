@@ -1,6 +1,6 @@
 "use client";
 import { auth, db, firebaseConfig } from "@/lib/firebase";
-import { initializeApp, getApp, deleteApp } from "firebase/app";
+import { initializeApp, deleteApp } from "firebase/app";
 import {
   getAuth,
   createUserWithEmailAndPassword,
