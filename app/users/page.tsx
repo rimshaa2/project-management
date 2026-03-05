@@ -104,105 +104,103 @@ export default function UsersPage() {
   };
 
   return (
-    <>
-      <S.PageContainer>
-        <S.HeaderRow>
-          <D.Title>User Management</D.Title>
-          <D.PrimaryButton onClick={handleAddClick}>
-            <PlusIcon className="size-5" />
-            Add User
-          </D.PrimaryButton>
-        </S.HeaderRow>
-        <S.UserGrid>
-          {loading ? (
-            <p>Loading...</p>
-          ) : (
-            users.map((user) => (
-              <S.UserCard key={user.uid}>
-                <div className="flex gap-4">
-                  <UserIcon className="size-4 text-white" />
-                  <div>
-                    <h4>{user.name}</h4>
-                    <p>{user.email}</p>
-                    <S.RoleBadge $role={user.role}>{user.role}</S.RoleBadge>
-                  </div>
-                </div>
-                <S.ActionGroup>
-                  <S.IconButton onClick={() => handleEditClick(user)}>
-                    <PencilSquareIcon className="size-5" />
-                  </S.IconButton>
-                  {user.uid !== currenUser?.uid ? (
-                    <S.IconButton
-                      $variant="danger"
-                      onClick={() => deleteUser(user.uid)}
-                    >
-                      <TrashIcon className="size-5" />
-                    </S.IconButton>
-                  ) : (
-                    <S.DisabledPlacholder title="You cannot delete yourself">
-                      <TrashIcon className="size-5" style={{ opacity: 0.3 }} />
-                    </S.DisabledPlacholder>
-                  )}
-                </S.ActionGroup>
-              </S.UserCard>
-            ))
-          )}
-        </S.UserGrid>
-        {isMOdalOpen && (
-          <S.ModalOverlay onClick={() => setIsModalOpen(false)}>
-            <S.ModalContent onClick={(e) => e.stopPropagation()}>
-              <D.Title>{editingUser ? "Edit User" : "Add New User"}</D.Title>
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <S.InputGroup>
-                  <label>
-                    Full Name <span style={{ color: "red" }}>*</span>
-                  </label>
-                  <S.StyledInput
-                    {...register("name", { required: "Name is required" })}
-                  />
-                </S.InputGroup>
-
-                <S.InputGroup>
-                  <label>
-                    Email Address <span style={{ color: "red" }}>*</span>
-                  </label>
-                  <S.StyledInput
-                    type="email"
-                    {...register("email", { required: "Email is required" })}
-                  />
-                </S.InputGroup>
-
-                {!editingUser && (
-                  <S.InputGroup>
-                    <label>
-                      Temporary Password <span style={{ color: "red" }}>*</span>
-                    </label>
-                    <S.StyledInput
-                      type="password"
-                      {...register("password", {
-                        required: true,
-                        minLength: 6,
-                      })}
-                    />
-                  </S.InputGroup>
-                )}
-
-                <S.ButtonGroup>
-                  <S.SecondaryButton
-                    type="button"
-                    onClick={() => setIsModalOpen(false)}
+    <D.LayoutContainer>
+      <S.HeaderRow>
+        <D.Title>User Management</D.Title>
+        <D.PrimaryButton onClick={handleAddClick}>
+          <PlusIcon className="size-5" />
+          Add User
+        </D.PrimaryButton>
+      </S.HeaderRow>
+      <S.UserGrid>
+        {loading ? (
+          <p>Loading...</p>
+        ) : (
+          users.map((user) => (
+            <S.UserCard key={user.uid}>
+              <div className="flex gap-4">
+                <UserIcon className="size-4 text-white" />
+                <S.UserInfo>
+                  <h4>{user.name}</h4>
+                  <p>{user.email}</p>
+                  <S.RoleBadge $role={user.role}>{user.role}</S.RoleBadge>
+                </S.UserInfo>
+              </div>
+              <S.ActionGroup>
+                <S.IconButton onClick={() => handleEditClick(user)}>
+                  <PencilSquareIcon className="size-5" />
+                </S.IconButton>
+                {user.uid !== currenUser?.uid ? (
+                  <S.IconButton
+                    $variant="danger"
+                    onClick={() => deleteUser(user.uid)}
                   >
-                    Cancel
-                  </S.SecondaryButton>
-                  <S.SubmitButton type="submit" disabled={isSubmitting}>
-                    {editingUser ? "Save Changes" : "Create Account"}
-                  </S.SubmitButton>
-                </S.ButtonGroup>
-              </form>
-            </S.ModalContent>
-          </S.ModalOverlay>
+                    <TrashIcon className="size-5" />
+                  </S.IconButton>
+                ) : (
+                  <S.DisabledPlacholder title="You cannot delete yourself">
+                    <TrashIcon className="size-5" style={{ opacity: 0.3 }} />
+                  </S.DisabledPlacholder>
+                )}
+              </S.ActionGroup>
+            </S.UserCard>
+          ))
         )}
-      </S.PageContainer>
-    </>
+      </S.UserGrid>
+      {isMOdalOpen && (
+        <S.ModalOverlay onClick={() => setIsModalOpen(false)}>
+          <S.ModalContent onClick={(e) => e.stopPropagation()}>
+            <D.Title>{editingUser ? "Edit User" : "Add New User"}</D.Title>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <S.InputGroup>
+                <label>
+                  Full Name <span style={{ color: "red" }}>*</span>
+                </label>
+                <S.StyledInput
+                  {...register("name", { required: "Name is required" })}
+                />
+              </S.InputGroup>
+
+              <S.InputGroup>
+                <label>
+                  Email Address <span style={{ color: "red" }}>*</span>
+                </label>
+                <S.StyledInput
+                  type="email"
+                  {...register("email", { required: "Email is required" })}
+                />
+              </S.InputGroup>
+
+              {editingUser && (
+                <S.InputGroup>
+                  <label>
+                    Temporary Password <span style={{ color: "red" }}>*</span>
+                  </label>
+                  <S.StyledInput
+                    type="password"
+                    {...register("password", {
+                      required: true,
+                      minLength: 6,
+                    })}
+                  />
+                </S.InputGroup>
+              )}
+
+              <S.ButtonGroup>
+                <S.SecondaryButton
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                >
+                  Cancel
+                </S.SecondaryButton>
+                <S.SubmitButton type="submit" disabled={isSubmitting}>
+                  {editingUser ? "Save Changes" : "Create Account"}
+                </S.SubmitButton>
+              </S.ButtonGroup>
+            </form>
+          </S.ModalContent>
+        </S.ModalOverlay>
+      )}
+    </D.LayoutContainer>
   );
 }

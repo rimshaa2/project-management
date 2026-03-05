@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { Bars3Icon } from "@heroicons/react/24/outline";
 import { usePathname, useRouter } from "next/navigation";
 import { auth } from "@/lib/firebase";
+import AuthGuard from "./components/AuthGuard";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -49,7 +50,7 @@ export default function RootLayout({
                   <Bars3Icon className="size-5 text-white" />
                 </button>
               </S.MobileHeader>
-              {children}
+              <AuthGuard>{children}</AuthGuard>
               <div id="chart-portal-target"></div>
             </S.MainContent>
           </S.LayoutWrapper>

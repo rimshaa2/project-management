@@ -85,37 +85,24 @@ const Card = styled.div`
   border: 1px solid ${THEME.surfaceLight};
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
   border-radius: 8px;
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
 `;
 
 const Title = styled.div`
   color: white;
   font-size: 1.8rem;
   font-weight: 700;
-  margin-bottom: 8px;
   text-align: center;
 `;
 
 const Subtitle = styled.div`
   color: #888;
   font-size: 0.9rem;
-  margin-bottom: 32px;
   text-align: center;
-`;
-
-const Input = styled.input`
-  padding: 12px 16px;
-  background: #1a1a1a;
-  border: 1px solid #333;
-  border-radius: 8px;
-  color: white;
-  margin-bottom: 20px;
-  font-size: 1rem;
-  transition: border-color 0.2s;
-
-  &:focus {
-    outline: none;
-    border-color: ${THEME.accent};
-  }
 `;
 
 const SubmitButton = styled.button`
@@ -127,7 +114,6 @@ const SubmitButton = styled.button`
   border-radius: 8px;
   cursor: pointer;
   border: none;
-  margin-top: 10px;
   transition: opacity 0.2s;
 
   &:hover {
@@ -147,7 +133,6 @@ const ErrorMessage = styled.div`
   border-radius: 8px;
   border: 1px solid rgba(239, 68, 68, 0.2);
   font-size: 0.85rem;
-  margin-bottom: 20px;
   text-align: center;
   font-weight: 500;
 `;

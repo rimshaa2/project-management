@@ -4,12 +4,11 @@ import { THEME, SPACING, mindevice, maxdevice } from "../global/global.styles";
 export const LayoutContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 24px;
+  padding: 16px;
   gap: 12px;
   min-height: 100vh;
   width: 100%;
   background: ${THEME.bg};
-  overflow-x: hidden;
 `;
 
 export const ContentArea = styled.div`
@@ -27,7 +26,10 @@ export const ContentArea = styled.div`
 export const DashboardContainer = styled.div`
   background: #${THEME.bg};
   color: ${THEME.textMain};
-  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
 `;
 
 export const HeaderRow = styled.div`
@@ -47,7 +49,6 @@ export const HeaderRow = styled.div`
 export const Title = styled.h2`
   font-size: 32px;
   font-weight: 700;
-  margin: 0;
 `;
 
 export const PrimaryButton = styled.div`
@@ -133,17 +134,14 @@ export const SectionHeader = styled.div`
   justify-content: space-between;
   width: 100%;
   align-items: center;
-  margin-bottom: 20px;
 
   h3 {
     font-size: 16px;
     color: #fff;
-    margin-top: 20px;
   }
   p {
     font-size: 16px;
     color: #fff;
-    margin-top: 20px;
   }
   button {
     background: #1e1e1e;
@@ -153,7 +151,6 @@ export const SectionHeader = styled.div`
     border-radius: 8px;
     cursor: pointer;
     font-size: 12px;
-    margin-top: 20px;
   }
 `;
 
@@ -167,7 +164,6 @@ export const ActivityInfo = styled.div`
   flex: 1;
   h4 {
     font-size: 14px;
-    margin-bottom: 4px;
   }
   p {
     font-size: 12px;
@@ -225,7 +221,6 @@ export const ChartCard = styled.div`
   }
 
   h4 {
-    margin-bottom: ${SPACING.md};
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.1em;
@@ -238,8 +233,6 @@ export const ChartCard = styled.div`
   @media (max-width: 1050px) {
     min-height: 280px;
     padding: ${SPACING.md};
-    margin-left: 16px;
-    margin-bottom: 4px;
   }
 `;
 
@@ -260,7 +253,6 @@ export const ChartCenterLabel = styled.div`
     font-size: 24px;
     font-weight: 700;
     color: #ffffff;
-    margin: 0;
   }
   span {
     font-size: 10px;

@@ -10,7 +10,6 @@ export const HeaderRow = styled.div`
   flex-direction: column;
   align-items: flex-start;
   gap: 16px;
-  margin-bottom: ${SPACING.xl};
 
   @media ${mindevice.laptop} {
     flex-direction: row;
@@ -23,7 +22,6 @@ export const Title = styled.h2`
   font-size: 1.5rem;
   font-weight: 600;
   color: #fff;
-  margin: 0;
 `;
 
 export const UserGrid = styled.div`
@@ -42,22 +40,19 @@ export const UserCard = styled.div`
   border-radius: 12px;
   display: flex;
   flex-direction: column;
-  gap: ${SPACING.md};
+  gap: ${SPACING.lg};
   transition: transform 0.2s;
 
   &:hover {
     transform: translateY(-2px);
-    border-color: ${THEME.accent}55;
+    border-color: ${THEME.accent};
   }
-
   h4 {
-    margin: 0 0 4px 0;
     font-size: 1rem;
     color: #fff;
   }
 
   p {
-    margin: 0 0 8px 0;
     font-size: 0.85rem;
     color: ${THEME.textDim};
   }
@@ -73,6 +68,8 @@ export const RoleBadge = styled.span<{ $role: string }>`
   font-weight: 700;
   text-transform: uppercase;
   padding: 4px 8px;
+  max-width: max-content;
+  text-align: center;
   border-radius: 4px;
   letter-spacing: 0.05rem;
   background: ${(props) => (props.$role === "admin" ? "#4f46e533" : "#3f3f46")};
@@ -106,9 +103,17 @@ export const ModalContent = styled.div`
   max-height: 90vh;
   overflow-y: auto;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
   &::-webkit-scrollbar {
     width: 6px;
   }
+
   &::-webkit-scrollbar-thumb {
     background: #333;
     border-radius: 10px;
@@ -116,15 +121,30 @@ export const ModalContent = styled.div`
 `;
 
 export const InputGroup = styled.div`
-  margin-bottom: ${SPACING.lg};
   display: flex;
   flex-direction: column;
+  gap: 8px;
 
   label {
     font-size: 0.85rem;
     color: ${THEME.textDim};
-    margin-bottom: 8px;
     font-weight: 500;
+  }
+`;
+
+export const UserInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  h4 {
+    font-size: 1rem;
+    color: ${THEME.textMain};
+  }
+
+  p {
+    font-size: 0.85rem;
+    color: ${THEME.textMuted};
   }
 `;
 
@@ -133,7 +153,7 @@ export const StyledInput = styled.input`
   border: 1px solid #333;
   padding: 12px;
   border-radius: 8px;
-  color: white;
+  color: ${THEME.textMain};
   font-size: 0.95rem;
 
   &:focus {
@@ -164,7 +184,6 @@ export const ButtonGroup = styled.div`
   display: flex;
   justify-content: flex-end;
   gap: ${SPACING.md};
-  margin-top: ${SPACING.xl};
   flex-direction: column-reverse;
 
   @media ${mindevice.mobile} {
@@ -182,7 +201,6 @@ export const ButtonGroup = styled.div`
 
 export const SecondaryButton = styled.button`
   background: transparent;
-  color: #fff;
   border: 1px solid #333;
   padding: 10px 18px;
   border-radius: 8px;
@@ -194,7 +212,7 @@ export const SecondaryButton = styled.button`
 `;
 
 export const SubmitButton = styled(PrimaryButton)`
-  background: #fff;
+  background: ${THEME.textMain};
   width: auto;
   padding: 10px 18px;
 

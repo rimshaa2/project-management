@@ -6,7 +6,7 @@ import { doc, setDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import * as S from "./Register.styles";
 import { useForm } from "react-hook-form";
-import { UserProfile } from "../types";
+import { Status, UserProfile, UserRole } from "../types";
 import FormInput from "../global/FormInput";
 
 export default function Register() {
@@ -30,7 +30,7 @@ export default function Register() {
         uid: user.uid,
         name: data.name,
         email: data.email,
-        role: "admin",
+        role: UserRole.ADMIN,
         createdAt: new Date(),
         createdBy: auth.currentUser?.uid,
       });

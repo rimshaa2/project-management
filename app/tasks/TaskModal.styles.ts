@@ -23,6 +23,11 @@ export const ModalContainer = styled.div`
   padding: 24px;
   border-radius: 16px;
   position: relative;
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
 
   @media ${mindevice.tablet} {
     width: 100%;
@@ -36,25 +41,22 @@ export const Header = styled.div`
   justify-content: space-between;
   padding-bottom: 20px;
   border-bottom: 1px solid #333;
-  margin-bottom: 24px;
 
   h2 {
     font-size: 1.25rem;
     font-weight: 600;
     color: #fff;
-    margin: 0;
   }
 `;
 
 export const FormGroup = styled.div`
   display: flex;
   flex-direction: column;
-  margin-bottom: 20px;
   flex: 1;
+  gap: 8px;
   label {
     font-size: 14px;
     color: #aaa;
-    margin-bottom: 8px;
   }
   input,
   textarea {
@@ -74,7 +76,6 @@ export const Row = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  margin-bottom: 20px;
 
   @media ${mindevice.tablet} {
     flex-direction: row;
@@ -89,7 +90,6 @@ export const StatusButtonGroup = styled.div`
   border-radius: 10px;
   border: 1px solid #333;
   width: 100%;
-  margin-top: 24px;
 
   @media (max-width: 400px) {
     flex-wrap: wrap;
@@ -152,7 +152,6 @@ export const SubmitButton = styled.button`
   border-radius: 12px;
   font-size: 18px;
   cursor: pointer;
-  margin-top: 20px;
   &:hover {
     background: #252525;
   }
@@ -175,7 +174,6 @@ export const DateInputWrapper = styled.div`
 export const FooterInfo = styled.div`
   display: flex;
   gap: 10px;
-  margin-top: 20px;
 `;
 
 export const UserBadge = styled.div`
@@ -189,13 +187,11 @@ export const UserBadge = styled.div`
 export const HelperText = styled.p`
   font-size: 12px;
   color: #666;
-  margin-top: 15px;
   line-height: 1.4;
 `;
 
 export const RequiredLabel = styled.label`
   color: #ccc;
-  margin-bottom: 8px;
   font-size: 0.85rem;
   display: block;
 

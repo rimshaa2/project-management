@@ -1,3 +1,4 @@
+import { mindevice } from "@/app/global/global.styles";
 import styled from "styled-components";
 
 export const KanbanBoard = styled.div`
@@ -6,7 +7,7 @@ export const KanbanBoard = styled.div`
   gap: 16px;
   width: 100%;
 
-  @media (min-width: 768px) {
+  @media ${mindevice.laptop} {
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
     gap: 20px;
     padding: 20px;
@@ -46,7 +47,6 @@ export const TaskContainer = styled.div`
   padding: 10px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
   overflow-y: auto;
 `;
 
@@ -55,9 +55,12 @@ export const TaskCard = styled.div`
   border: 1px solid #333;
   padding: 14px;
   border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
   h4 {
     color: #fff;
-    margin-bottom: 5px;
   }
   p {
     color: #888;
@@ -98,10 +101,10 @@ export const StatusSelect = styled.select<{ $status: string }>`
 `;
 
 export const TaskFooter = styled.div`
-  margin-top: 15px;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
+  gap: 8px;
 
   .meta {
     display: flex;
@@ -115,7 +118,6 @@ export const TaskFooter = styled.div`
     p {
       font-size: 11px;
       color: #888;
-      margin: 0;
     }
   }
 `;

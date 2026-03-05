@@ -17,6 +17,7 @@ export const COLORS = {
   accent: "#6366F1",
   hover: "rgba(255, 255, 255, 0.05)",
 };
+
 export const THEME = {
   bg: "#121212",
   surface: "#1A1A1A",
@@ -55,6 +56,7 @@ export const EmptyStateContainer = styled.div`
   align-items: center;
   justify-content: center;
   padding: 60px 20px;
+  gap: 8px;
   text-align: center;
   background: rgba(255, 255, 255, 0.03);
   border: 2px dashed #333;
@@ -65,13 +67,11 @@ export const EmptyStateContainer = styled.div`
     background: #1e1e1e;
     padding: 8px;
     border-radius: 50%;
-    margin-bottom: 20px;
     color: #6366f1;
   }
 
   h3 {
     color: white;
-    margin-bottom: 8px;
   }
 
   p {

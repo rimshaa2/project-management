@@ -85,10 +85,10 @@ export default function DashboardPage() {
           <S.ActivityList>
             {loading ? (
               <p>Loading Activites...</p>
-            ) : projects.length === 0 ? (
+            ) : tasks.length === 0 ? (
               <EmptyState
                 icon={FolderIcon}
-                title="No projects yet"
+                title="No tasks yet"
                 description="Start by creating a project to manage your team's tasks."
                 showButton={isAdmin}
                 buttonText="Create Project"
@@ -110,8 +110,7 @@ export default function DashboardPage() {
                         : "New Task added"}
                     </h4>
                     <p>
-                      {activity.name} for {activity.project} for deadline{" "}
-                      {activity.endDate}
+                      {activity.name} for deadline {activity.endDate}
                     </p>
                   </S.ActivityInfo>
 

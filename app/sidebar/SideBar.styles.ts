@@ -61,8 +61,7 @@ export const ToggleButton = styled.button<{ $isCollapsed: boolean }>`
   border: none;
   cursor: pointer;
   padding: ${SPACING.sm};
-  margin-right: ${SPACING.md};
-  align-self: flex-end;
+  align-self: ${(props) => (props.$isCollapsed ? "center" : "flex-end")};
   color: ${COLORS.textMuted};
   transition: color 0.2s ease;
 
@@ -99,7 +98,7 @@ export const NavItem = styled.div<{ $active?: boolean; $isCollapsed: boolean }>`
 
   svg {
     color: ${(props) => (props.$active ? COLORS.textMain : COLORS.textMuted)};
-    min-wdith: 20px;
+    min-width: 20px;
   }
 
   &:hover {
@@ -122,7 +121,6 @@ export const SectionLabel = styled.div<SideBarProps>`
 `;
 
 export const AddButton = styled.button`
-  margin-top: auto;
   background: #1a1a1a;
   border: 1px solid #333;
   color: white;

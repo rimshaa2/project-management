@@ -23,7 +23,7 @@ interface TaskModalProps {
 }
 
 export default function TaskModal({ onClose, task }: TaskModalProps) {
-  const isEditMode = !!task;
+  const isEditMode = !!task?.id;
   const { projects } = useProjects();
   const { createTask, loading } = useCreateTask();
   const { updateTask } = useUpdateTask();
@@ -137,7 +137,6 @@ export default function TaskModal({ onClose, task }: TaskModalProps) {
                         style={{
                           color: "#ff4d4d",
                           fontSize: "12px",
-                          marginTop: "4px",
                         }}
                       >
                         {error.message}
@@ -183,7 +182,6 @@ export default function TaskModal({ onClose, task }: TaskModalProps) {
                         style={{
                           color: "#ff4d4d",
                           fontSize: "12px",
-                          marginTop: "4px",
                         }}
                       >
                         {error.message}

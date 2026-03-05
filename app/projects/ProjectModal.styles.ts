@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { mindevice } from "../global/global.styles";
 
 export const Overlay = styled.div`
   position: fixed;
@@ -20,27 +21,22 @@ export const ModalContainer = styled.div`
   padding: 24px;
   border-radius: 16px;
   position: relative;
-`;
 
-export const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 30px;
-  h2 {
-    font-size: 24px;
-    font-weight: 500;
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
   }
 `;
 
 export const FormGroup = styled.div`
   display: flex;
   flex-direction: column;
-  margin-bottom: 20px;
+  gap: 8px;
   flex: 1;
   label {
     font-size: 14px;
     color: #aaa;
-    margin-bottom: 8px;
   }
   input,
   textarea {
@@ -60,9 +56,8 @@ export const Row = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  margin-bottom: 20px;
 
-  @media (min-width: 768px) {
+  @media ${mindevice.tablet} {
     flex-direction: row;
     gap: 20px;
   }
@@ -72,7 +67,6 @@ export const StatusGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 15px;
-  margin: 20px 0;
 `;
 
 export const StatusCard = styled.div<{ $active?: boolean }>`
@@ -84,7 +78,6 @@ export const StatusCard = styled.div<{ $active?: boolean }>`
   cursor: pointer;
   transition: all 0.2s;
   p {
-    margin-top: 10px;
     font-size: 14px;
     color: ${(props) => (props.$active ? "#fff" : "#888")};
   }
@@ -99,7 +92,6 @@ export const SubmitButton = styled.button`
   border-radius: 12px;
   font-size: 18px;
   cursor: pointer;
-  margin-top: 20px;
   &:hover {
     background: #252525;
   }
@@ -125,7 +117,6 @@ export const DateInputWrapper = styled.div`
 export const FooterInfo = styled.div`
   display: flex;
   gap: 10px;
-  margin-top: 20px;
 `;
 
 export const UserBadge = styled.div`
@@ -139,14 +130,13 @@ export const UserBadge = styled.div`
 export const HelperText = styled.p`
   font-size: 11px;
   color: #666;
-  margin-top: 15px;
   line-height: 1.4;
 `;
 
 export const ProjectGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr;
-  gap: 16px;
+  gap: 24px;
   width: 100%;
 
   @media (min-width: 768px) {
@@ -163,7 +153,13 @@ export const ProjectCard = styled.div`
   padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  a {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    text-decoration: none;
+    color: inherit;
+  }
 `;
 
 export const CardHeader = styled.div`
@@ -187,7 +183,6 @@ export const StatsRow = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-top: 5px;
 `;
 
 export const StatsItem = styled.div`
